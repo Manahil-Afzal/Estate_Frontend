@@ -109,7 +109,7 @@ export default function SignIn() {
           </Link>
         </div>
 
-        {error && <p className="text-red-300 mt-3 text-center">{}</p>}
+        {error && <p className="text-red-300 mt-3 text-center">{""}</p>}
       </div>
     </div>
   );
