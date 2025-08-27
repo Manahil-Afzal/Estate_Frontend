@@ -143,19 +143,19 @@ export default function Home() {
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const images = ['/1.jpg','/2.jpg','/3.jpg','/4.jpg','/5.jpg','/6.jpg','/7.jpg','/8.jpg'];
 
-  useEffect(() => {
-    const fetchListings = async () => {
-       try {
-      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/listings`);
+useEffect(() => {
+  const fetchListings = async () => {
+    try {
+    const res = await fetch(`${API_BASE_URL}/listing`); 
       const data = await res.json();
-      setApiListings(data);
+      setApiListings(data);  
     } catch (err) {
-        console.error("API fetch failed, showing Dubai listings only:", err);
-        setApiListings([]); // fallback
-      }
-    };
-    fetchListings();
-  }, []);
+      console.error('Failed to fetch listings:', err);
+    }
+  };
+  fetchListings();
+}, []);
+
 
   const allListings = [...dubaiListings, ...apiListings];
 
@@ -172,7 +172,6 @@ export default function Home() {
   return (
     <div className="max-w-6xl mx-auto p-6 flex flex-col gap-10">
 
-      {/* Top Section */}
       <div className="flex flex-col gap-4 text-left">
         <h1 className="text-6xl lg:text-7xl font-bold text-slate-700 leading-snug">
           Find your next{" "}
