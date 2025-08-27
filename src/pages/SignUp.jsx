@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import OAuth from "../components/OAuth";
-
+import { API_BASE_URL } from "../config"; 
 export default function SignUp() {
   const [formData, setFormData] = useState({});
   const [error, setError] = useState(null);
@@ -21,27 +21,27 @@ export default function SignUp() {
 
   const handleSubmit = async (e) => {
   e.preventDefault();
-  setLoading(true); // show loading state
-  const { username, email, password } = formData; // <-- extract from formData
-
+  setLoading(true); 
+  const { username, email, password } = formData; 
   if (!username || !email || !password) {
     setError("All fields are required");
     setLoading(false);
     return;
   }
 
-  try {
-    const res = await fetch("http://localhost:3000/api/auth/signup", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, email, password }),
-    });
+   try {
+        const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/auth/signup`, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify(formData),
+});
+
 
     const data = await res.json();
     if (!res.ok) throw new Error(data.message || "Sign Up failed");
     console.log("Sign Up Success:", data);
     setLoading(false);
-    navigate("/sign-in"); // Redirect after successful signup
+    navigate("/sign-in"); 
   } catch (err) {
     console.error("Sign Up Error:", err);
     setError(err.message);
@@ -76,27 +76,27 @@ export default function SignUp() {
           <input
   type="text"
   placeholder="Username"
-  className="border p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+  className="border p-3 rounded-lg"
   id="username"
-  value={formData.username || ""} // add default to avoid undefined
+  value={formData.username || ""}
   onChange={handleChange}
 />
-          <input
-            type="email"
-            placeholder="Email"
-            className="border p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            id="email"
-            value={formData.email}
-            onChange={handleChange}
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            className="border p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            id="password"
-            value={formData.password}
-            onChange={handleChange}
-          />
+<input
+  type="email"
+  placeholder="Email"
+  className="border p-3 rounded-lg"
+  id="email"
+  value={formData.email || ""}
+  onChange={handleChange}
+/>
+<input
+  type="password"
+  placeholder="Password"
+  className="border p-3 rounded-lg"
+  id="password"
+  value={formData.password || ""}
+  onChange={handleChange}
+/>
 
           <button
             disabled={loading}
@@ -115,7 +115,7 @@ export default function SignUp() {
           </Link>
         </div>
 
-        {error && <p className="text-red-500 mt-5 text-center">{""}</p>}
+        {error && <p className="text-red-500 mt-5 text-center">{error}</p>}
       </div>
     </div>
   );

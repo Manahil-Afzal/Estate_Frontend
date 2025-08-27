@@ -12,6 +12,7 @@ const dubaiListings = [
     baths: 3,
     imageUrls: ["/2.jpg", "/1.jpg"],
     description: "Luxury villa with 4 bedrooms, private pool and garden",
+    userRef: '64f2a5c1234567890abcdef',
   },
   {
     id: 2,
@@ -24,6 +25,7 @@ const dubaiListings = [
     baths: 2,
     imageUrls: ["/4.jpg", "/3.jpg"],
     description: "Cozy 2-bedroom apartment near the beach with sea view",
+     userRef: '64f2a5c1234567890abcdef',
   },
   {
     id: 3,
@@ -37,6 +39,7 @@ const dubaiListings = [
     baths: 2,
     imageUrls: ["/5.jpg", "/8.jpg"],
     description: "Modern apartment in the heart of Dubai, 3 bedrooms",
+     userRef: '64f2a5c1234567890abcdef',
   },
   {
     id: 4,
@@ -49,6 +52,7 @@ const dubaiListings = [
     baths: 2,
     imageUrls: ["/7.jpg", "/8.jpg"],
     description: "Family-friendly house with garden and 3 bedrooms",
+     userRef: '64f2a5c1234567890abcdef',
   },
   {
     id: 5,
@@ -62,6 +66,7 @@ const dubaiListings = [
     baths: 4,
     imageUrls: ["/1.jpg", "/2.jpg"],
     description: "Spacious penthouse with terrace and sea view",
+     userRef: '64f2a5c1234567890abcdef',
   },
   {
     id: 6,
@@ -74,6 +79,7 @@ const dubaiListings = [
     baths: 1,
     imageUrls: ["/3.jpg", "/4.jpg"],
     description: "Compact modern studio in city center, ideal for singles",
+     userRef: '64f2a5c1234567890abcdef',
   },
   {
     id: 7,
@@ -87,6 +93,7 @@ const dubaiListings = [
     baths: 4,
     imageUrls: ["/5.jpg", "/6.jpg"],
     description: "Beautiful 5-bedroom family villa with private garden",
+     userRef: '64f2a5c1234567890abcdef',
   },
   {
     id: 8,
@@ -100,6 +107,7 @@ const dubaiListings = [
     baths: 2,
     imageUrls: ["/7.jpg", "/8.jpg"],
     description: "2-bedroom apartment in central Dubai with balcony view",
+     userRef: '64f2a5c1234567890abcdef',
   },
 ];
 

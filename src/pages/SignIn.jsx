@@ -25,33 +25,32 @@ export default function SignIn() {
 
   // Submit sign-in form
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    dispatch(signInStart());
+  e.preventDefault();
+  dispatch(signInStart());
 
-    try {
-     const res = await fetch(`${API_BASE_URL}/api/auth/signin`, {
-  method: "POST",
-  credentials: "include",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify(formData),
-});
+  try {
+    const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/auth/signin`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: formData.email, password: formData.password }),
+      credentials: "include",
+    });
 
+    const data = await res.json();
 
-
-      const data = await res.json();
-
-      if (res.ok) {
-        dispatch(signInSuccess(data));
-        navigate("/"); 
-      } else {
-        dispatch(signInFailure(data.message));
-        alert(data.message);
-      }
-    } catch (err) {
-      dispatch(signInFailure(err.message));
-      console.error("Network error:", err);
+    if (res.ok) {
+      dispatch(signInSuccess(data));
+      navigate("/"); 
+    } else {
+      dispatch(signInFailure(data.message));
+      alert(data.message);
     }
-  };
+  } catch (err) {
+    dispatch(signInFailure(err.message));
+    console.error("Network error:", err);
+  }
+};
+
 
   return (
     <div className="relative w-full h-screen flex items-center justify-center">

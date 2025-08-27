@@ -8,7 +8,7 @@ import {
 import { app } from '../firebase';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-
+import { API_BASE_URL } from "../config"; 
 export default function CreateListing() {
   const { currentUser } = useSelector((state) => state.user);
   const navigate = useNavigate();
@@ -34,47 +34,59 @@ export default function CreateListing() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const fetchListing = async () => {
+  const fetchListing = async () => {
+    try {
       const listingId = params.listingId;
-      const res = await fetch(`/api/listing/get/${listingId}`);
-      const data = await res.json();
-      if (data.success === false) {
-        console.log(data.message);
+      const res = await fetch(`${API_BASE_URL}/api/listing/${listingId}`); // match your backend route
+      if (!res.ok) {
+        console.error('Failed to fetch listing');
         return;
       }
-      setFormData(data);
-    };
+      const listing = await res.json();
 
-    fetchListing();
-  }, []);
-
-  const handleImageSubmit = (e) => {
-    if (files.length > 0 && files.length + formData.imageUrls.length < 7) {
-      setUploading(true);
-      setImageUploadError(false);
-      const promises = [];
-
-      for (let i = 0; i < files.length; i++) {
-        promises.push(storeImage(files[i]));
-      }
-      Promise.all(promises)
-        .then((urls) => {
-          setFormData({
-            ...formData,
-            imageUrls: formData.imageUrls.concat(urls),
-          });
-          setImageUploadError(false);
-          setUploading(false);
-        })
-        .catch((err) => {
-          setImageUploadError('Image upload failed (2 mb max per image)');
-          setUploading(false);
-        });
-    } else {
-      setImageUploadError('You can only upload 6 images per listing');
-      setUploading(false);
+      setFormData((prev) => ({
+        ...prev,
+        ...listing,
+        imageUrls: listing.imageUrls || [],
+      }));
+    } catch (err) {
+      console.error('Error fetching listing:', err);
     }
   };
+
+  fetchListing();
+}, [params.listingId]);
+
+const handleImageSubmit = () => {
+  if (!files || files.length === 0) {
+    setImageUploadError('No files selected');
+    return;
+  }
+
+  if (files.length + formData.imageUrls.length > 6) {
+    setImageUploadError('You can only upload 6 images per listing');
+    return;
+  }
+
+  setUploading(true);
+  setImageUploadError(false);
+
+  const promises = Array.from(files).map((file) => storeImage(file));
+
+  Promise.all(promises)
+    .then((urls) => {
+      setFormData((prev) => ({
+        ...prev,
+        imageUrls: prev.imageUrls.concat(urls),
+      }));
+      setUploading(false);
+    })
+    .catch(() => {
+      setImageUploadError('Image upload failed (2 MB max per image)');
+      setUploading(false);
+    });
+};
+
 
   const storeImage = async (file) => {
     return new Promise((resolve, reject) => {
@@ -148,16 +160,19 @@ export default function CreateListing() {
         return setError('Discount price must be lower than regular price');
       setLoading(true);
       setError(false);
-      const res = await fetch(`/api/listing/update/${params.listingId}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...formData,
-          userRef: currentUser._id,
-        }),
-      });
+
+        const listingId = params.listingId; // make sure params.listingId exists
+const res = await fetch(`${API_BASE_URL}/api/listing/${listingId}`, {
+  method: 'PUT', // usually updates use PUT
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    ...formData,
+    userRef: currentUser._id,
+  }),
+});
+
       const data = await res.json();
       setLoading(false);
       if (data.success === false) {

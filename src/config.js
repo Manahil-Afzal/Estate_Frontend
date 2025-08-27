@@ -1,3 +1,2 @@
-// config.js (frontend)
-export const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
+// config.js
+export const API_BASE_URL = "https://estate-backend.vercel.app/api"; // Make sure this is correct
