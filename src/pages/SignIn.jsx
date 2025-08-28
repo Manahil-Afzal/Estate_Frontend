@@ -46,7 +46,7 @@ export default function SignIn() {
     <div className="relative w-full h-screen flex items-center justify-center">
       {/* Background Video */}
       <video
-        src="/MP3.mp4"
+        src="/MP2.mp4"
         autoPlay
         loop
         muted
