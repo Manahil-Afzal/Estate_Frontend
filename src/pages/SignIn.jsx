@@ -1,70 +1,58 @@
-
-
-
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { signInStart, signInSuccess, signInFailure } from "../redux/user/userSlice";
+import React, { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { API_BASE_URL } from "../config";
 import OAuth from "../components/OAuth";
-import { API_BASE_URL } from "../config"; 
-
-
-
-
 
 export default function SignIn() {
-  const [formData, setFormData] = useState({ email: "", password: "" });
-  const { loading, error } = useSelector((state) => state.user);
+  const [formData, setFormData] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
-  // Update form data
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
+    setError(null);
   };
 
-  // Submit sign-in form
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  dispatch(signInStart());
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
 
-  try {
-    const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/auth/signin`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email: formData.email, password: formData.password }),
-      credentials: "include",
-    });
+    try {
+      const res = await fetch(`${API_BASE_URL}/auth/signin`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+        }),
+        credentials: "include",
+      });
 
-    const data = await res.json();
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Login failed");
 
-    if (res.ok) {
-      dispatch(signInSuccess(data));
-      navigate("/"); 
-    } else {
-      dispatch(signInFailure(data.message));
-      alert(data.message);
+      navigate("/"); // redirect after login
+    } catch (err) {
+      setError(err?.message || "Sign in failed");
+      console.error("Sign In Error:", err);
+    } finally {
+      setLoading(false);
     }
-  } catch (err) {
-    dispatch(signInFailure(err.message));
-    console.error("Network error:", err);
-  }
-};
-
+  };
 
   return (
     <div className="relative w-full h-screen flex items-center justify-center">
       {/* Background Video */}
       <video
-        src="/MP2.mp4"
+        src="/MP3.mp4"
         autoPlay
         loop
         muted
         playsInline
         className="absolute top-0 left-0 w-full h-full object-cover -z-10"
       />
-
-      {/* Overlay */}
       <div className="absolute top-0 left-0 w-full h-full bg-black/40 -z-10"></div>
 
       {/* Sign In Form */}
@@ -78,17 +66,19 @@ export default function SignIn() {
             type="email"
             id="email"
             placeholder="Email"
-            value={formData.email}
+            value={formData.email || ""}
             onChange={handleChange}
             className="border p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required
           />
           <input
             type="password"
             id="password"
             placeholder="Password"
-            value={formData.password}
+            value={formData.password || ""}
             onChange={handleChange}
             className="border p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required
           />
 
           <button
@@ -104,16 +94,12 @@ export default function SignIn() {
         <div className="flex gap-2 mt-5 justify-center">
           <p className="text-gray-700">Don't have an account?</p>
           <Link to="/sign-up">
-            <span className="text-blue-700 font-semibold">Sign Up</span>
+            <span className="text-blue-600 font-semibold">Sign Up</span>
           </Link>
         </div>
 
-        {error && <p className="text-red-300 mt-3 text-center">{""}</p>}
+        {error && <p className="text-red-500 mt-3 text-center">{error}</p>}
       </div>
     </div>
   );
 }
-
-
-
-

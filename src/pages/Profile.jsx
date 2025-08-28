@@ -1,43 +1,61 @@
 // src/pages/Profile.jsx
 import { useSelector, useDispatch } from 'react-redux';
 import { useRef, useState, useEffect } from 'react';
-import {
-  getDownloadURL,
-  ref,
-  uploadBytesResumable,
-} from 'firebase/storage';
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { storage } from "../firebase";
-import {
-  updateUserStart,
-  updateUserSuccess,
-  updateUserFailure,
-  deleteUserFailure,
-  deleteUserStart,
-  deleteUserSuccess,
+import { 
   signOutUserStart,
   signOutUserSuccess,
   signOutUserFailure,
-} from '../redux/user/userSlice';
+  updateUserStart,
+  updateUserSuccess,
+  updateUserFailure,
+  deleteUserStart,
+  deleteUserSuccess,
+  deleteUserFailure
+} from "../redux/user/userSlice";
 import { Link } from 'react-router-dom';
-import { API_BASE_URL } from '../config';
+import { API_BASE_URL } from "../config";
 
 export default function Profile() {
   const fileRef = useRef(null);
   const { currentUser, loading, error } = useSelector((state) => state.user);
-  const [file, setFile] = useState(undefined);
   const [filePerc, setFilePerc] = useState(0);
   const [fileUploadError, setFileUploadError] = useState(false);
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({
+    username: '',
+    email: '',
+    password: '',
+    avatar: '',
+  });
   const [updateSuccess, setUpdateSuccess] = useState(false);
   const [showListingsError, setShowListingsError] = useState(false);
   const [userListings, setUserListings] = useState([]);
   const dispatch = useDispatch();
 
+  // Initialize formData from currentUser
   useEffect(() => {
-    if (file) {
-      handleFileUpload(file);
+    if (currentUser) {
+      setFormData({
+        username: currentUser.username,
+        email: currentUser.email,
+        password: '',
+        avatar: currentUser.avatar || '',
+      });
     }
-  }, [file]);
+  }, [currentUser]);
+
+  // Handle file selection
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    if (file.size > 2 * 1024 * 1024) { // 2MB limit
+      setFileUploadError(true);
+      return;
+    }
+    setFileUploadError(false);
+    handleFileUpload(file);
+  };
 
   const handleFileUpload = (file) => {
     const fileName = new Date().getTime() + file.name;
@@ -53,20 +71,20 @@ export default function Profile() {
       () => setFileUploadError(true),
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) =>
-          setFormData({ ...formData, avatar: downloadURL })
+          setFormData(prev => ({ ...prev, avatar: downloadURL }))
         );
       }
     );
   };
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.id]: e.target.value });
+    setFormData(prev => ({ ...prev, [e.target.id]: e.target.value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    dispatch(updateUserStart());
     try {
-      dispatch(updateUserStart());
       const res = await fetch(`${API_BASE_URL}/user/update/${currentUser._id}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -80,14 +98,14 @@ export default function Profile() {
       }
       dispatch(updateUserSuccess(data));
       setUpdateSuccess(true);
-    } catch (error) {
-      dispatch(updateUserFailure(error.message));
+    } catch (err) {
+      dispatch(updateUserFailure(err.message));
     }
   };
 
   const handleDeleteUser = async () => {
+    dispatch(deleteUserStart());
     try {
-      dispatch(deleteUserStart());
       const res = await fetch(`${API_BASE_URL}/user/delete/${currentUser._id}`, {
         method: 'DELETE',
         credentials: "include",
@@ -98,14 +116,14 @@ export default function Profile() {
         return;
       }
       dispatch(deleteUserSuccess());
-    } catch (error) {
-      dispatch(deleteUserFailure(error.message));
+    } catch (err) {
+      dispatch(deleteUserFailure(err.message));
     }
   };
 
   const handleSignOut = async () => {
+    dispatch(signOutUserStart());
     try {
-      dispatch(signOutUserStart());
       const res = await fetch(`${API_BASE_URL}/auth/signout`, {
         credentials: "include",
       });
@@ -115,8 +133,8 @@ export default function Profile() {
         return;
       }
       dispatch(signOutUserSuccess());
-    } catch (error) {
-      dispatch(signOutUserFailure(error.message));
+    } catch (err) {
+      dispatch(signOutUserFailure(err.message));
     }
   };
 
@@ -149,21 +167,22 @@ export default function Profile() {
         return;
       }
       setUserListings((prev) => prev.filter((l) => l._id !== listingId));
-    } catch (error) {
-      console.log(error.message);
+    } catch (err) {
+      console.log(err.message);
     }
   };
 
   return (
     <div className='p-3 max-w-lg mx-auto'>
       <h1 className='text-3xl font-semibold text-center my-7'>Profile</h1>
+
       <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
         <input
-          onChange={(e) => setFile(e.target.files[0])}
           type='file'
           ref={fileRef}
           hidden
           accept='image/*'
+          onChange={handleFileChange}
         />
         <img
           onClick={() => fileRef.current.click()}
@@ -180,11 +199,12 @@ export default function Profile() {
             <span className='text-green-700'>Upload complete!</span>
           ) : ('')}
         </p>
+
         <input
           type='text'
           placeholder='username'
-          defaultValue={currentUser?.username}
           id='username'
+          value={formData.username || ''}
           className='border p-3 rounded-lg'
           onChange={handleChange}
         />
@@ -192,26 +212,29 @@ export default function Profile() {
           type='email'
           placeholder='email'
           id='email'
-          defaultValue={currentUser?.email}
+          value={formData.email || ''}
           className='border p-3 rounded-lg'
           onChange={handleChange}
         />
         <input
           type='password'
           placeholder='password'
-          onChange={handleChange}
           id='password'
+          value={formData.password || ''}
           className='border p-3 rounded-lg'
+          onChange={handleChange}
         />
+
         <button
           disabled={loading}
           className='bg-slate-700 text-white rounded-lg p-3 uppercase hover:opacity-95 disabled:opacity-80'
         >
           {loading ? 'Loading...' : 'Update'}
         </button>
+
         <Link
           className='bg-green-700 text-white p-3 rounded-lg uppercase text-center hover:opacity-95'
-          to={'/create-listing'}
+          to='/create-listing'
         >
           Create Listing
         </Link>
@@ -226,21 +249,18 @@ export default function Profile() {
         </span>
       </div>
 
-      <p className='text-red-700 mt-5'>{error || ''}</p>
-      <p className='text-green-700 mt-5'>
-        {updateSuccess ? 'User updated successfully!' : ''}
-      </p>
-      <button onClick={handleShowListings} className='text-green-700 w-full'>
+      {error && <p className='text-red-700 mt-5'>{error}</p>}
+      {updateSuccess && <p className='text-green-700 mt-5'>User updated successfully!</p>}
+
+      <button onClick={handleShowListings} className='text-green-700 w-full mt-5'>
         Show Listings
       </button>
-      <p className='text-red-700 mt-5'>
-        {showListingsError ? 'Error showing listings' : ''}
-      </p>
+      {showListingsError && <p className='text-red-700 mt-5'>Error showing listings</p>}
 
       {userListings?.length > 0 && (
-        <div className='flex flex-col gap-4'>
-          <h1 className='text-center mt-7 text-2xl font-semibold'>Your Listings</h1>
-          {userListings.map((listing) => (
+        <div className='flex flex-col gap-4 mt-5'>
+          <h1 className='text-center text-2xl font-semibold'>Your Listings</h1>
+          {userListings.map(listing => (
             <div key={listing._id} className='border rounded-lg p-3 flex justify-between items-center gap-4'>
               <Link to={`/listing/${listing._id}`}>
                 <img src={listing.imageUrls[0]} alt='cover' className='h-16 w-16 object-contain' />
@@ -248,7 +268,7 @@ export default function Profile() {
               <Link to={`/listing/${listing._id}`} className='text-slate-700 font-semibold hover:underline truncate flex-1'>
                 <p>{listing.name}</p>
               </Link>
-              <div className='flex flex-col item-center'>
+              <div className='flex flex-col items-center'>
                 <button onClick={() => handleListingDelete(listing._id)} className='text-red-700 uppercase'>Delete</button>
                 <Link to={`/update-listing/${listing._id}`}>
                   <button className='text-green-700 uppercase'>Edit</button>

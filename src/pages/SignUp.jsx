@@ -1,59 +1,54 @@
-
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { API_BASE_URL } from "../config";
 import OAuth from "../components/OAuth";
-import { API_BASE_URL } from "../config"; 
+
 export default function SignUp() {
   const [formData, setFormData] = useState({});
-  const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  // Update form data on input change
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.id]: e.target.value,
-    });
-        
-      setError(null);  
+    setFormData({ ...formData, [e.target.id]: e.target.value });
+    setError(null);
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  setLoading(true); 
-  const { username, email, password } = formData; 
-  if (!username || !email || !password) {
-    setError("All fields are required");
-    setLoading(false);
-    return;
-  }
+    e.preventDefault();
+    setError(null);
+    setLoading(true);
 
-   try {
-        const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/auth/signup`, {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify(formData),
-});
+    try {
+      const payload = {
+        username: formData.username, // match backend
+        email: formData.email,
+        password: formData.password,
+      };
 
-
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.message || "Sign Up failed");
-    console.log("Sign Up Success:", data);
-    setLoading(false);
-    navigate("/sign-in"); 
-  } catch (err) {
-    console.error("Sign Up Error:", err);
-    setError(err.message);
-    setLoading(false);
-  }
-};
+      const res = await fetch(`${API_BASE_URL}/auth/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+          credentials: "include",
+      });
 
 
+      const data = await res.json();
+
+      if (!res.ok) throw new Error(data.message || "Failed to sign up");
+
+      navigate("/sign-in"); // redirect after success
+    } catch (err) {
+      setError(err?.message || "Sign Up failed");
+      console.error("Sign Up Error:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="relative w-full h-screen flex items-center justify-center">
-      {/* Background Video */}
       <video
         src="/MP3.mp4"
         autoPlay
@@ -62,11 +57,8 @@ export default function SignUp() {
         playsInline
         className="absolute top-0 left-0 w-full h-full object-cover -z-10"
       />
-
-      {/* Overlay */}
       <div className="absolute top-0 left-0 w-full h-full bg-black/40 -z-10"></div>
 
-      {/* Sign Up Form */}
       <div className="relative bg-white/80 backdrop-blur-md p-6 rounded-2xl shadow-xl w-full max-w-lg">
         <h1 className="text-3xl text-center font-semibold my-7 text-gray-900">
           Sign Up
@@ -74,29 +66,32 @@ export default function SignUp() {
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <input
-  type="text"
-  placeholder="Username"
-  className="border p-3 rounded-lg"
-  id="username"
-  value={formData.username || ""}
-  onChange={handleChange}
-/>
-<input
-  type="email"
-  placeholder="Email"
-  className="border p-3 rounded-lg"
-  id="email"
-  value={formData.email || ""}
-  onChange={handleChange}
-/>
-<input
-  type="password"
-  placeholder="Password"
-  className="border p-3 rounded-lg"
-  id="password"
-  value={formData.password || ""}
-  onChange={handleChange}
-/>
+            type="text"
+            id="username"
+            placeholder="Username"
+            value={formData.username || ""}
+            onChange={handleChange}
+            className="border p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required
+          />
+          <input
+            type="email"
+            id="email"
+            placeholder="Email"
+            value={formData.email || ""}
+            onChange={handleChange}
+            className="border p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required
+          />
+          <input
+            type="password"
+            id="password"
+            placeholder="Password"
+            value={formData.password || ""}
+            onChange={handleChange}
+            className="border p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required
+          />
 
           <button
             disabled={loading}
@@ -109,18 +104,14 @@ export default function SignUp() {
         </form>
 
         <div className="flex gap-2 mt-5 justify-center">
-          <p className="text-gray-700">Have an account?</p>
+          <p className="text-gray-700">Already have an account?</p>
           <Link to="/sign-in">
-            <span className="text-blue-700 font-semibold">Sign In</span>
+            <span className="text-blue-600 font-semibold">Sign In</span>
           </Link>
         </div>
 
-        {error && <p className="text-red-500 mt-5 text-center">{error}</p>}
+        {error && <p className="text-red-500 mt-3 text-center">{error}</p>}
       </div>
     </div>
   );
 }
-
-
-
-

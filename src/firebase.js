@@ -1,25 +1,19 @@
-// Import the functions you need
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
-import { getStorage } from "firebase/storage";  // ✅ make sure this is here
+import { getStorage } from "firebase/storage";
 
-// Your Firebase config
 const firebaseConfig = {
-  apiKey: "AIzaSyB8O2hxse8iL8sc912Fnwv7nrbJCZqoqtE",
-  authDomain: "real-estate-9ac0b.firebaseapp.com",
-  projectId: "real-estate-9ac0b",
-  storageBucket: "real-estate-9ac0b.appspot.com",
-  messagingSenderId: "965893112707",
-  appId: "1:965893112707:web:542ecb45735f236b95ecb6",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-// Exports
+export default app; // default export
 export const auth = getAuth(app);
 export const googleProvider = new GoogleAuthProvider();
 export const storage = getStorage(app);
-
-export { app };        // optional (only if you really need it somewhere else)
-export default app;    // optional, you can remove if not needed

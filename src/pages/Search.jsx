@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import ListingItem from '../components/ListingItem';
 import dubaiListings from '../components/dubaiListings';
+import { API_BASE_URL } from "../config";
 
 export default function Search() {
   const navigate = useNavigate();
