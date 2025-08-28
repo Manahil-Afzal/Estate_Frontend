@@ -15,9 +15,9 @@ import { API_BASE_URL } from "../config";
 export default function Home() {
   const [apiListings, setApiListings] = useState([]);
   const navigate = useNavigate();
-  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+  const API_BASE_URL = "https://estate-backend.vercel.app/api";
   const images = ['/1.jpg','/2.jpg','/3.jpg','/4.jpg','/5.jpg','/6.jpg','/7.jpg','/8.jpg'];
-
+  
 useEffect(() => {
   const fetchListings = async () => {
     try {

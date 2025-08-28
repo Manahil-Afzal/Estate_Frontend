@@ -16,7 +16,7 @@ export default function Listing() {
   const [listing, setListing] = useState(null);
   const [copied, setCopied] = useState(false);
   const [contact, setContact] = useState(false);
-
+  const API_BASE_URL = "https://estate-backend.vercel.app/api";
   useEffect(() => {
     // Fetch listing from your static data
     const foundListing = dubaiListings.find(item => item.id === parseInt(listingId));

@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function OAuth() {
   const navigate = useNavigate();
-
+   const API_BASE_URL = "https://estate-backend.vercel.app/api";
   const handleGoogle = async () => {
     try {
       const result = await signInWithPopup(auth, googleProvider);

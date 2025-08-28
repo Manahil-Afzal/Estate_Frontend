@@ -11,7 +11,7 @@ export default function Header() {
   const currentUser = useSelector((state) => state.user?.currentUser);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  const API_BASE_URL = "https://estate-backend.vercel.app/api";
   const [searchTerm, setSearchTerm] = useState("");
   const [results, setResults] = useState([]);
 
