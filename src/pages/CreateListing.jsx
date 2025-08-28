@@ -30,7 +30,6 @@ export default function CreateListing() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const API_BASE_URL = "https://estate-backend.vercel.app/api";
-  // ===================== Fetch listing if updating =====================
   useEffect(() => {
     if (!params.listingId) return;
 
@@ -55,7 +54,6 @@ export default function CreateListing() {
     fetchListing();
   }, [params.listingId]);
 
-  // ===================== Image upload handler =====================
   const storeImage = async (file) => {
     return new Promise((resolve, reject) => {
       const storage = getStorage(app);
@@ -116,7 +114,6 @@ export default function CreateListing() {
     }
   };
 
-  // ===================== Create or Update Listing =====================
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (formData.imageUrls.length < 1) return setError('Upload at least one image');
@@ -162,7 +159,6 @@ export default function CreateListing() {
       </h1>
 
       <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4">
-        {/* Left side form */}
         <div className="flex flex-col gap-4 flex-1">
           <input
             type="text"
@@ -217,7 +213,6 @@ export default function CreateListing() {
               </div>
             ))}
           </div>
-          {/* Numeric fields */}
           <div className="flex flex-wrap gap-6">
             <div className="flex items-center gap-2">
               <input
@@ -275,8 +270,6 @@ export default function CreateListing() {
             )}
           </div>
         </div>
-
-        {/* Right side: Images */}
         <div className="flex flex-col flex-1 gap-4">
           <p className="font-semibold">
             Images: <span className="font-normal text-gray-600 ml-2">First image is cover (max 6)</span>

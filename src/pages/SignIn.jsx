@@ -33,7 +33,7 @@ export default function SignIn() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Login failed");
 
-      navigate("/"); // redirect after login
+      navigate("/"); 
     } catch (err) {
       setError(err?.message || "Sign in failed");
       console.error("Sign In Error:", err);
@@ -44,7 +44,6 @@ export default function SignIn() {
 
   return (
     <div className="relative w-full h-screen flex items-center justify-center">
-      {/* Background Video */}
       <video
         src="/MP2.mp4"
         autoPlay
@@ -54,8 +53,6 @@ export default function SignIn() {
         className="absolute top-0 left-0 w-full h-full object-cover -z-10"
       />
       <div className="absolute top-0 left-0 w-full h-full bg-black/40 -z-10"></div>
-
-      {/* Sign In Form */}
       <div className="relative bg-white/80 backdrop-blur-md p-6 rounded-2xl shadow-xl w-full max-w-lg">
         <h1 className="text-3xl text-center font-semibold my-7 text-gray-900">
           Sign In

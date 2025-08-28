@@ -3,19 +3,14 @@ import React from 'react';
 export default function About() {
   return (
     <div className="relative w-full h-screen">
-      {/* Background Video */}
-      <video
+            <video
         src="/MP4.mp4"
         autoPlay
         loop
         muted
         className="absolute top-0 left-0 w-full h-full object-cover z-0"
       />
-
-      {/* Overlay (optional dark layer for readability) */}
       <div className="absolute top-0 left-0 w-full h-full bg-black/30 z-10"></div>
-
-      {/* Text Content */}
       <div className="relative z-20 flex flex-col justify-center items-center h-full px-8 text-center">
         <h1 className="text-4xl md:text-6xl font-bold text-gray-900">
           About Sahand Estate

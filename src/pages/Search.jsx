@@ -1,5 +1,3 @@
-
-// src/pages/Search.jsx
 import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import ListingItem from '../components/ListingItem';
@@ -44,8 +42,6 @@ useEffect(() => {
   const fetchListings = () => {
     setLoading(true);
     let results = dubaiListings;
-
-    // Apply filters if any
     if (searchTermFromUrl) {
       results = results.filter(listing =>
         listing.name.toLowerCase().includes(searchTermFromUrl.toLowerCase())
@@ -102,10 +98,8 @@ useEffect(() => {
 
   return (
     <div className="flex flex-col md:flex-row">
-      {/* Sidebar */}
       <div className="p-7 border-b-2 md:border-r-2 md:min-h-screen">
         <form onSubmit={handleSubmit} className="flex flex-col gap-8">
-          {/* Search Term */}
           <div className="flex items-center gap-2">
             <label className="whitespace-nowrap font-semibold">
               Search Term:
@@ -119,8 +113,6 @@ useEffect(() => {
               onChange={handleChange}
             />
           </div>
-
-          {/* Type Filter */}
           <div className="flex gap-2 flex-wrap items-center">
             <label className="font-semibold">Type:</label>
             {['all', 'rent', 'sale'].map((type) => (
@@ -147,7 +139,6 @@ useEffect(() => {
             </div>
           </div>
 
-          {/* Sort */}
           <div className="flex items-center gap-2">
             <label className="font-semibold">Sort:</label>
             <select
@@ -169,7 +160,6 @@ useEffect(() => {
         </form>
       </div>
 
-    {/* Results */}
 <div className="p-7 flex flex-wrap gap-4">
   {loading && (
     <p className="text-xl text-slate-700 text-center w-full">
@@ -207,8 +197,6 @@ useEffect(() => {
     </button>
   )}
 </div>
-
       </div>
-    // </div>
   );
 }

@@ -1,5 +1,4 @@
 
-
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaSearch } from "react-icons/fa";
@@ -14,8 +13,6 @@ export default function Header() {
   const API_BASE_URL = "https://estate-backend.vercel.app/api";
   const [searchTerm, setSearchTerm] = useState("");
   const [results, setResults] = useState([]);
-
-  // Dynamic search
   const handleSearchChange = async (e) => {
     const value = e.target.value;
     setSearchTerm(value);
@@ -37,8 +34,6 @@ export default function Header() {
       setResults([]);
     }
   };
-
-  // Sign out handler
   const handleSignOut = async () => {
     try {
       const res = await fetch(`${API_BASE_URL}/auth/signout`, {
@@ -57,7 +52,6 @@ export default function Header() {
 
   return (
     <header className="bg-gray-700 text-white p-7 flex justify-between items-center shadow-md">
-      {/* Logo */}
       <Link
         to="/"
         className="text-3xl font-extrabold tracking-wide text-transparent 
@@ -66,8 +60,6 @@ export default function Header() {
       >
         Shahand Estate
       </Link>
-
-      {/* Search bar */}
       <div className="relative mx-4 w-1/3">
         <input
           type="text"
@@ -97,8 +89,6 @@ export default function Header() {
           </ul>
         )}
       </div>
-
-      {/* Navigation */}
       <ul className="flex gap-4 mt-2 sm:mt-0 items-center">
         <Link to="/"><li className="hidden sm:inline text-slate-300 hover:underline">Home</li></Link>
         <Link to="/about"><li className="hidden sm:inline text-slate-300 hover:underline">About</li></Link>

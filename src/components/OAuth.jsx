@@ -12,8 +12,6 @@ export default function OAuth() {
     try {
       const result = await signInWithPopup(auth, googleProvider);
       const user = result.user;
-
-      // Send user info to backend
       const res = await fetch(`${API_BASE_URL}/auth/google`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -27,7 +25,7 @@ export default function OAuth() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Google login failed");
 
-      navigate("/"); // Redirect after login
+      navigate("/"); 
     } catch (err) {
       console.error("Google login error:", err);
       alert(err.message || "Google login failed");

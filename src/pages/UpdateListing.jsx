@@ -37,7 +37,7 @@ export default function CreateListing() {
   const fetchListing = async () => {
     try {
       const listingId = params.listingId;
-      const res = await fetch(`${API_BASE_URL}/api/listing/${listingId}`); // match your backend route
+      const res = await fetch(`${API_BASE_URL}/api/listing/${listingId}`); 
       if (!res.ok) {
         console.error('Failed to fetch listing');
         return;
@@ -161,9 +161,9 @@ const handleImageSubmit = () => {
       setLoading(true);
       setError(false);
 
-        const listingId = params.listingId; // make sure params.listingId exists
+        const listingId = params.listingId; 
 const res = await fetch(`${API_BASE_URL}/api/listing/${listingId}`, {
-  method: 'PUT', // usually updates use PUT
+  method: 'PUT', 
   headers: {
     'Content-Type': 'application/json',
   },

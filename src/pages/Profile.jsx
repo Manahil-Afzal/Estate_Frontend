@@ -1,4 +1,3 @@
-// src/pages/Profile.jsx
 import { useSelector, useDispatch } from 'react-redux';
 import { useRef, useState, useEffect } from 'react';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
@@ -33,7 +32,6 @@ export default function Profile() {
   const [userListings, setUserListings] = useState([]);
   const dispatch = useDispatch();
   const API_BASE_URL = "https://estate-backend.vercel.app/api";
-  // Initialize formData from currentUser
   useEffect(() => {
     if (currentUser) {
       setFormData({
@@ -45,11 +43,10 @@ export default function Profile() {
     }
   }, [currentUser]);
 
-  // Handle file selection
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    if (file.size > 2 * 1024 * 1024) { // 2MB limit
+    if (file.size > 2 * 1024 * 1024) { 
       setFileUploadError(true);
       return;
     }

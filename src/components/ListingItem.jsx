@@ -2,7 +2,6 @@ import { Link } from 'react-router-dom';
 import { MdLocationOn } from 'react-icons/md';
 import { API_BASE_URL } from "../config";
 
-// src/components/ListingItem.jsx
 export default function ListingItem({ listing }) {
   return (
     <div className="bg-white shadow-md rounded-lg overflow-hidden w-full sm:w-80">

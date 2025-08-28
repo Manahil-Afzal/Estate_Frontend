@@ -1,5 +1,3 @@
-
-// src/pages/Home.jsx
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -67,8 +65,6 @@ useEffect(() => {
           Let's get started...
         </button>
       </div>
-
-      {/* Image Carousel */}
       <div>
         <Swiper
           modules={[Navigation, Pagination, Autoplay]}
@@ -94,8 +90,6 @@ useEffect(() => {
           ))}
         </Swiper>
       </div>
-
-      {/* Offers */}
       {offers.length > 0 && (
         <section>
           <div className="flex flex-col items-start gap-1 mb-4">
@@ -118,7 +112,6 @@ useEffect(() => {
         </section>
       )}
 
-      {/* Rentals */}
       {rentals.length > 0 && (
         <section>
           <div className="flex flex-col items-start gap-1 mb-4">
@@ -141,7 +134,6 @@ useEffect(() => {
         </section>
       )}
 
-      {/* Sales */}
       {sales.length > 0 && (
         <section>
           <div className="flex flex-col items-start gap-1 mb-4">

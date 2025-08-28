@@ -21,7 +21,7 @@ export default function SignUp() {
 
     try {
       const payload = {
-        username: formData.username, // match backend
+        username: formData.username, 
         email: formData.email,
         password: formData.password,
       };
@@ -29,8 +29,9 @@ export default function SignUp() {
       const res = await fetch(`${API_BASE_URL}/auth/signup`,  {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify(payload),
-          credentials: "include",
+          
       });
 
 
@@ -38,7 +39,7 @@ export default function SignUp() {
 
       if (!res.ok) throw new Error(data.message || "Failed to sign up");
 
-      navigate("/sign-in"); // redirect after success
+      navigate("/sign-in"); 
     } catch (err) {
       setError(err?.message || "Sign Up failed");
       console.error("Sign Up Error:", err);

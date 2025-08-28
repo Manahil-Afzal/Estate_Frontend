@@ -5,9 +5,7 @@ export default function Footer() {
   return (
     <footer className="bg-gray-700 text-[#20211e] mt-">
       <div className="max-w-6xl mx-auto px-3 py-20">
-        {/* Main Footer Content */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-14">
-          {/* Company Info */}
           <div className="space-y-6">
             <h3 className="text-2xl font-bold">
               <span className="text-[#b7b9b0]">Shahand </span>
@@ -33,7 +31,6 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Quick Links */}
           <div className="space-y-6">
             <h4 className="text-lg font-semibold text-[#9ba076]">Quick Links</h4>
             <ul className="space-y-2">
@@ -60,7 +57,6 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Services */}
           <div className="space-y-4">
             <h4 className="text-lg font-semibold text-[#a0ac6f]">Services</h4>
             <ul className="space-y-2">
@@ -71,7 +67,6 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Contact Info */}
           <div className="space-y-4">
             <h4 className="text-lg font-semibold text-[#929c64]">Contact Us</h4>
             <div className="space-y-3">
@@ -91,7 +86,6 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Bottom Bar */}
         <div className="border-t border-[#b1b5a3] mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
           <p className="text-[#868c6f] text-sm">© 2024 Real Estate. All rights reserved.</p>
           <div className="flex space-x-6 mt-4 md:mt-0">

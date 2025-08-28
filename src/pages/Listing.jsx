@@ -1,4 +1,3 @@
-// src/pages/Listing.jsx
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -18,7 +17,6 @@ export default function Listing() {
   const [contact, setContact] = useState(false);
   const API_BASE_URL = "https://estate-backend.vercel.app/api";
   useEffect(() => {
-    // Fetch listing from your static data
     const foundListing = dubaiListings.find(item => item.id === parseInt(listingId));
     setListing(foundListing || null);
   }, [listingId]);
@@ -33,7 +31,6 @@ export default function Listing() {
 
   return (
     <main>
-      {/* Image carousel */}
       <Swiper navigation modules={[Navigation]}>
         {listing.imageUrls?.map((url, index) => (
           <SwiperSlide key={index}>
@@ -47,8 +44,6 @@ export default function Listing() {
           </SwiperSlide>
         ))}
       </Swiper>
-
-      {/* Share button */}
       <div className="fixed top-[13%] right-[3%] z-10 border rounded-full w-12 h-12 flex justify-center items-center bg-slate-100 cursor-pointer">
         <FaShare
           className="text-slate-500"
@@ -66,7 +61,6 @@ export default function Listing() {
         </p>
       )}
 
-      {/* Listing details */}
       <div className="flex flex-col max-w-4xl mx-auto p-3 my-7 gap-4">
         <p className="text-2xl font-semibold">
           {listing.name} - {listing.price}
