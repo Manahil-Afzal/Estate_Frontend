@@ -4,14 +4,18 @@ import { signInWithPopup } from "firebase/auth";
 import { auth, googleProvider } from "../firebase";
 import { API_BASE_URL } from "../config";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { signInSuccess } from "../redux/user/userSlice";
 
 export default function OAuth() {
   const navigate = useNavigate();
-   const API_BASE_URL = "https://estate-backend.vercel.app/api";
+  const dispatch = useDispatch();
+
   const handleGoogle = async () => {
     try {
       const result = await signInWithPopup(auth, googleProvider);
       const user = result.user;
+
       const res = await fetch(`${API_BASE_URL}/auth/google`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -20,15 +24,18 @@ export default function OAuth() {
           email: user.email,
           photo: user.photoURL,
         }),
+        credentials: "include", // ✅ important
       });
 
       const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "Google login failed");
-
-      navigate("/"); 
+      if (res.ok) {
+        dispatch(signInSuccess(data));
+        navigate("/");
+      } else {
+        console.error("Google login failed:", data.message);
+      }
     } catch (err) {
       console.error("Google login error:", err);
-      alert(err.message || "Google login failed");
     }
   };
 

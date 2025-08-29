@@ -2,13 +2,16 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { API_BASE_URL } from "../config";
 import OAuth from "../components/OAuth";
+import { useDispatch } from "react-redux";
+import { signInSuccess } from "../redux/user/userSlice";
 
 export default function SignIn() {
   const [formData, setFormData] = useState({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-  const API_BASE_URL = "https://estate-backend.vercel.app/api";
+  const dispatch = useDispatch();
+  const API_BASE_URL =  "http://localhost:3000/api";
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
     setError(null);
@@ -32,7 +35,7 @@ export default function SignIn() {
 
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Login failed");
-
+      dispatch(signInSuccess(data))
       navigate("/"); 
     } catch (err) {
       setError(err?.message || "Sign in failed");
